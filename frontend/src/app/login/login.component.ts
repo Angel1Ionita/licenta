@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
+import { StorageService } from '../storage.service';
 
 @Component({
   selector: 'app-login',
@@ -28,7 +29,7 @@ export class LoginComponent {
   })
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
+    private storage: StorageService,
     private authService: AuthService,
     private formBuilder: NonNullableFormBuilder,
     private router: Router,
@@ -39,16 +40,14 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.authService.performLogin(this.loginForm.getRawValue().email, this.loginForm.getRawValue().password)
         .subscribe(data => {
-          if (isPlatformBrowser(this.platformId)) {
-            localStorage.setItem('email', JSON.stringify(data.email));
-            localStorage.setItem('role', JSON.stringify(data.role));
-          }
+          this.storage.setItem('email', JSON.stringify(data.email));
+          this.storage.setItem('role', JSON.stringify(data.role));
+
           this.loginForm.reset();
           this.router.navigate(['']);
         }
         );
 
-      //authenticated=true
     }
   }
 

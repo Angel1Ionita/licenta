@@ -28,9 +28,9 @@ export class AuthService {
     return this.http.post(`${this.baseUrl}/admin/register`, user);
   }
 
-  // getUserInfo(): Observable<UserName> {
-  //   return this.http.get<UserName>(`${this.baseUrl}/user`);
-  // }
+  getUserInfo() {
+    return this.http.get<{ email: string, role: string }>(`${this.baseUrl}/user`);
+  }
 
 
 

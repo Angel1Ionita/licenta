@@ -3,6 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { isPlatformBrowser } from '@angular/common';
+import { StorageService } from '../storage.service';
 
 @Component({
   selector: 'app-home',
@@ -17,28 +18,26 @@ export class HomeComponent {
   role?: string;
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
+    private storage: StorageService,
     private authService: AuthService,
     private router: Router,
   ) { }
 
   ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.user = JSON.parse(localStorage.getItem('email')!);
-      this.role = JSON.parse(localStorage.getItem('role')!);
-      console.log(this.user);
-      console.log(this.role);
-    }
+
+    this.user = JSON.parse(this.storage.getItem('email')!);
+    this.role = JSON.parse(this.storage.getItem('role')!);
+    console.log(this.user);
+    console.log(this.role);
+
   }
 
   onSubmitLogout(): void {
     this.authService.performLogout().subscribe();
     this.router.navigate(['/login'])
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem('email');
-      localStorage.removeItem('role');
-    }
-    //authenticated=false
+    this.storage.removeItem('email');
+    this.storage.removeItem('role');
+
   }
 
 }

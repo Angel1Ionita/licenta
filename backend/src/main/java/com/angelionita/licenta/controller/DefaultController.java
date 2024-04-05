@@ -59,5 +59,9 @@ public class DefaultController {
         return userService.getUserInfo(loginRequest.getEmail());
     }
 
+    @GetMapping("/user")
+    public Map<String, String> getUserInfo(Principal principal){
+        return userService.getUserInfo(principal.getName());
+    }
 }
 
