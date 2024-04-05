@@ -12,8 +12,8 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  performLogin(email: String, password: String) {
-    return this.http.post(`${this.baseUrl}/login`, { email, password });
+  performLogin(email: string, password: string) {
+    return this.http.post<{ email: string, role: string }>(`${this.baseUrl}/login`, { email, password });
   }
 
   performLogout() {
@@ -21,14 +21,18 @@ export class AuthService {
   }
 
   performRegister(user: UserRegister) {
-    return this.http.post(`${this.baseUrl}/register`,user);
+    return this.http.post(`${this.baseUrl}/register`, user);
   }
 
   performRegisterAdmin(user: UserAdminRegister) {
-    return this.http.post(`${this.baseUrl}/admin/register`,user);
+    return this.http.post(`${this.baseUrl}/admin/register`, user);
   }
 
-  
+  // getUserInfo(): Observable<UserName> {
+  //   return this.http.get<UserName>(`${this.baseUrl}/user`);
+  // }
+
+
 
 
 

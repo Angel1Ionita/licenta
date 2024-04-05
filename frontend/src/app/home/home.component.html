@@ -1,0 +1,17 @@
+@if(user){
+    {{user}}
+    <button mat-flat-button color="primary" (click)="onSubmitLogout()">Logout</button>
+}
+@else {
+    <button mat-flat-button [routerLink]="['/login']" color="primary">Login</button>
+    <button mat-flat-button [routerLink]="['/register']" color="primary">Register</button> 
+}
+
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+    Donec mollis erat at justo euismod aliquam. 
+    Phasellus vitae ex a libero ultrices rutrum id id ex. 
+    Vivamus mollis varius urna. 
+    Interdum et malesuada fames ac ante ipsum primis in faucibus. 
+    Nulla dolor mi, elementum id lectus vel, vulputate mattis orci. 
+    Etiam auctor ante id dictum aliquam. 
+    Cras massa libero, egestas vestibulum velit at, dictum hendrerit eros.</p>

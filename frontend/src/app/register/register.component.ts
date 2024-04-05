@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -16,6 +17,7 @@ import { MatCardModule } from '@angular/material/card';
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
+  
   hidePassword = true;
 
   userRegisterForm = this.formBuilder.group({
@@ -28,6 +30,7 @@ export class RegisterComponent {
   constructor(
     private authService: AuthService,
     private formBuilder: NonNullableFormBuilder,
+    private router: Router,
   ) { }
 
   onSubmitRegister(): void {
@@ -36,6 +39,7 @@ export class RegisterComponent {
       let user: UserRegister = this.userRegisterForm.getRawValue();
       this.authService.performRegister(user).subscribe();
       this.userRegisterForm.reset();
+      this.router.navigate(['/login']);
     }
   }
 
