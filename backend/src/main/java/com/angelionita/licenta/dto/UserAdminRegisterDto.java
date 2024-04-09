@@ -26,7 +26,7 @@ public class UserAdminRegisterDto {
     private String password;
 
     @NotBlank
-    @Pattern(regexp = "^(USER|ADMIN)$", message = "must be a valid role")
+    @Pattern(regexp = "^(USER|ADMIN|MEDIC)$", message = "must be a valid role")
     private String role;
 
 }

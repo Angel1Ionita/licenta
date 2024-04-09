@@ -1,15 +1,4 @@
-@if(user){
-    {{user}}
-    <button mat-flat-button color="primary" (click)="onSubmitLogout()">Logout</button>
-}
-@else {
-    <button mat-flat-button [routerLink]="['/login']" color="primary">Login</button>
-    <button mat-flat-button [routerLink]="['/register']" color="primary">Register</button> 
-}
-
-@if(role==="ADMIN"){
-    <button mat-flat-button [routerLink]="['/admin']" color="primary">Dashboard</button>
-}
+<app-navigation></app-navigation>
 
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
     Donec mollis erat at justo euismod aliquam. 

@@ -1,0 +1,15 @@
+mat-card {
+    max-width: 500px;
+    margin: 1em auto;
+    text-align: center;
+}
+
+mat-card + mat-card {
+    margin-top: 20px;
+}
+
+img {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+}

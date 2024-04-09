@@ -1,0 +1,28 @@
+.example-spacer {
+    flex: 1 1 auto;
+  }
+
+.mat-toolbar {
+    background-color: white;
+}
+
+.toolbar-item > :hover {
+    color: gray;
+    cursor: pointer;
+    
+}
+
+.toolbar-item > * {
+    padding: 0 16px;
+    font-size: 0.8em;
+}
+
+.logo {
+    margin-left: 30px;
+    width: 210px; 
+    height: 30px;
+}
+
+.logo:hover {
+    cursor: pointer;
+}

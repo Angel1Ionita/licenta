@@ -7,7 +7,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { Router } from '@angular/router';
-import { isPlatformBrowser } from '@angular/common';
 import { StorageService } from '../storage.service';
 
 @Component({
@@ -42,7 +41,6 @@ export class LoginComponent {
         .subscribe(data => {
           this.storage.setItem('email', JSON.stringify(data.email));
           this.storage.setItem('role', JSON.stringify(data.role));
-
           this.loginForm.reset();
           this.router.navigate(['']);
         }
