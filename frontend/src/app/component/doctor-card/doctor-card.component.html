@@ -1,0 +1,17 @@
+<h1 style="text-align: center;">Medics</h1>
+
+@for (medic of medics; track $index) {
+<mat-card>
+    <mat-card-header>
+        <img mat-card-avatar [src]="getImage(medic.image)">
+        <mat-card-title style="cursor: pointer;" routerLink="/medics/{{medic.id}}">{{medic.first_name+" "+medic.first_name}}</mat-card-title>
+        <mat-card-subtitle>
+            {{medic.title}}
+            <mat-card-actions>
+                <button mat-flat-button routerLink="/appointments" [queryParams]="{medic: medic.id}" color="primary">Make an appointment</button>
+                <!-- <button mat-flat-button color="primary"></button> -->
+            </mat-card-actions>
+        </mat-card-subtitle>
+    </mat-card-header>
+</mat-card>
+}

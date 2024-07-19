@@ -1,0 +1,39 @@
+<mat-card style="margin: 5%; text-align: center;">
+    <mat-card-title>User Appointments</mat-card-title>
+    <mat-card-content>
+        @for (userAppointment of userAppointments | async; track $index) {
+        <mat-card>
+            <!-- <mat-card-title></mat-card-title> -->
+            <mat-card-content>
+                {{userAppointment.hospital.name}}
+                {{userAppointment.medic}}
+                {{userAppointment.specialization.name}}
+                {{userAppointment.date}} - {{userAppointment.time | time}}
+                {{userAppointment.description}}
+            </mat-card-content>
+        </mat-card>
+        }
+    </mat-card-content>
+</mat-card>
+
+
+<mat-card style="margin: 5%; text-align: center;">
+    <mat-card-title>Appointments</mat-card-title>
+    <mat-card-content>
+        @for (appointment of appointments | async; track $index) {
+        <mat-card>
+            <!-- <mat-card-title></mat-card-title> -->
+            <mat-card-content>
+                {{appointment.hospital.name}}
+                {{appointment.medic.firstName}}
+                {{appointment.medic.lastName}}
+                {{appointment.specialization.name}}
+                {{appointment.date | date:'dd-MM-yyyy'}} - {{appointment.time | time}}
+                {{appointment.description}}
+            </mat-card-content>
+        </mat-card>
+        }
+    </mat-card-content>
+</mat-card>
+
+<app-appointment-form [isStaff]="false"></app-appointment-form>

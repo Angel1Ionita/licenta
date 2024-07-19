@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>User Appointment</h2>
+<mat-dialog-content>
+    <p>Patient: {{appointment.user.firstName}} {{appointment.user.lastName}}</p>
+    <p>Hospital: {{appointment.hospital.name}}</p>
+    <p>Medic: {{appointment.medic}}</p>
+    <p>{{appointment.specialization.name}}</p>
+    <p>Time: {{appointment.date | date:'dd-MM-yyyy'}} - {{appointment.time | time}}</p>
+    <p>{{appointment.description}}</p>
+</mat-dialog-content>
+<mat-dialog-actions alig>
+    <button mat-raised-button color="primary" (click)="onCloseClick()">Close</button>
+    <!-- <button mat-raised-button color="primary" [mat-dialog-close]="data." (click)="onCloseClick()">Create Appointment</button> -->
+</mat-dialog-actions>

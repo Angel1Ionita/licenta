@@ -1,0 +1,31 @@
+<mat-toolbar>
+
+    <mat-toolbar-row style="border-bottom: thin solid lightgray">
+        <span class="example-spacer"></span>
+        @if(user){
+        {{user}}
+        <button mat-flat-button (click)="onSubmitLogout()">Logout</button>
+        }
+        @else {
+        <button mat-flat-button routerLink="/login">Login</button>
+        <button mat-flat-button routerLink="/register">Register</button>
+        }
+
+        @if(role==="ADMIN"){
+        <button mat-flat-button routerLink="/admin">Dashboard</button>
+        }
+    </mat-toolbar-row>
+    <mat-toolbar-row>
+        <img src="assets/images/logo.png" class="logo" routerLink="">
+        <!-- to do:disable background change for buttons -->
+        <span class="example-spacer"></span>
+
+        <div class="toolbar-item">
+            <span routerLink="/medics">Medics</span>
+            <span [routerLink]="role==='ADMIN' ? '/staff-appointments' : '/appointments'">Appointments</span>
+            <span routerLink="/contact">Contact</span>
+        </div>
+        <span class="example-spacer"></span>
+    </mat-toolbar-row>
+
+</mat-toolbar>

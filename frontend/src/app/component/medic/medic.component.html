@@ -1,0 +1,10 @@
+@if(medic) {
+<mat-card>
+    <div style="text-align: center; padding-top: 2em;">
+        <p>{{medic.title}} {{medic.first_name}} {{medic.last_name}}</p>
+        <img [src]="getImage(medic.image)">
+        <p>Specialization: {{medic.specialization?.name}}</p>
+        <p>Location: {{medic.hospital?.name}}</p>
+    </div>
+</mat-card>
+}
