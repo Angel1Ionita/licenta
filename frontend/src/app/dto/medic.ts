@@ -1,11 +1,19 @@
 export interface Hospital {
     id: number,
     name: string,
-    address: string,
+    city: string,
+    lat: number,
+    lng: number
 }
 export interface Specialization {
     id: number,
     name: string,
+    products: Product[]
+}
+export interface Product {
+    id: number,
+    name: string,
+    price: number
 }
 
 export interface Medic {

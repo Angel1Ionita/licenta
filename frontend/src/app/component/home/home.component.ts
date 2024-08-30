@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterModule } from '@angular/router';
 import { NavigationComponent } from '../navigation/navigation.component';
@@ -8,7 +8,8 @@ import { NavigationComponent } from '../navigation/navigation.component';
   standalone: true,
   imports: [MatButtonModule, RouterModule, NavigationComponent ],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrl: './home.component.css',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class HomeComponent {
 

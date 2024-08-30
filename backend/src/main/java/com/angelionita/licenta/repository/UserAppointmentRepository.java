@@ -1,5 +1,6 @@
 package com.angelionita.licenta.repository;
 
+import com.angelionita.licenta.model.Medic;
 import com.angelionita.licenta.projection.UserAppointmentResponse;
 import com.angelionita.licenta.model.UserAppointment;
 import com.angelionita.licenta.model.User;
@@ -12,4 +13,6 @@ import java.util.List;
 public interface UserAppointmentRepository extends JpaRepository<UserAppointment, Long> {
     List<UserAppointmentResponse> findBy();
     List<UserAppointmentResponse> findByUser(User user);
+
+    List<UserAppointmentResponse> findByMedic(Medic medic);
 }

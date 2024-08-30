@@ -19,7 +19,11 @@ public class Hospital {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String address;
+    private String city;
+    private Double lat;
+    private Double lng;
+
+//    private String city;
 
     //private List<Medic> medics -> m:m
 }

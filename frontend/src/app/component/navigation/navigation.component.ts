@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { StorageService } from '../../service/storage.service';
 import { AuthService } from '../../service/auth.service';
 import { Router, RouterModule } from '@angular/router';
 import { MatDividerModule } from '@angular/material/divider';
@@ -19,20 +18,19 @@ export class NavigationComponent {
   role?: string;
 
   constructor(
-    private storage: StorageService,
     private authService: AuthService,
     private router: Router,
   ) { }
 
   ngOnInit() {
-    this.user = JSON.parse(this.storage.getItem('email')!);
-    this.role = JSON.parse(this.storage.getItem('role')!);
+    this.user = JSON.parse(localStorage.getItem('email')!);
+    this.role = JSON.parse(localStorage.getItem('role')!);
   }
 
   onSubmitLogout(): void {
     this.authService.performLogout().subscribe();
     this.router.navigate(['/login']);
-    this.storage.removeItem('email');
-    this.storage.removeItem('role');
+    localStorage.removeItem('email');
+    localStorage.removeItem('role');
   }
 }

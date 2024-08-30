@@ -1,0 +1,19 @@
+<mat-accordion>
+    @for (specialization of specializations | async; track $index) {
+    <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                {{specialization.name}}
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+         @for (product of specialization.products; track $index) {
+            <p>{{product.name}}   {{product.price}}</p>
+            @if (!$last) {
+                <mat-divider></mat-divider>
+            }
+            
+
+         }
+    </mat-expansion-panel>
+    }
+</mat-accordion>

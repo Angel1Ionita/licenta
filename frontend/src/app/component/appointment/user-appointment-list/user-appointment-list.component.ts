@@ -26,6 +26,8 @@ export class UserAppointmentListComponent implements OnInit {
   ngOnInit(): void {
     this.userAppointments=this.appointmentService.getUserAppointmentsByUser();
     this.appointments=this.appointmentService.getAppointmentsByUser();
+
+    //this.userAppointments=this.appointmentService.getUserAppointmentsByMedic();
   }
 
 

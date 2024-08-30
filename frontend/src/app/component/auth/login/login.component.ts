@@ -7,7 +7,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { Router } from '@angular/router';
-import { StorageService } from '../../../service/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -28,7 +27,6 @@ export class LoginComponent {
   })
 
   constructor(
-    private storage: StorageService,
     private authService: AuthService,
     private formBuilder: NonNullableFormBuilder,
     private router: Router,
@@ -39,8 +37,8 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.authService.performLogin(this.loginForm.getRawValue().email, this.loginForm.getRawValue().password)
         .subscribe(data => {
-          this.storage.setItem('email', JSON.stringify(data.email));
-          this.storage.setItem('role', JSON.stringify(data.role));
+          localStorage.setItem('email', JSON.stringify(data.email));
+          localStorage.setItem('role', JSON.stringify(data.role));
           this.loginForm.reset();
           this.router.navigate(['']);
         }

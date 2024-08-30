@@ -1,5 +1,10 @@
-<p>contact works!</p>
+<!-- <mat-form-field>
+    <mat-label>Favorite food</mat-label>
+    <mat-select [(value)]="citye">
+      @for (center of centers; track city) {
+        <mat-option [value]="city[0]">{{city[0]}}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field> -->
 
-<iframe width="425" height="350"
-    src="https://www.openstreetmap.org/export/embed.html?bbox=26.07759475708008%2C44.380741449746914%2C26.186170578002933%2C44.436108753775116&amp;layer=mapnik&amp;marker=44.40843165303018%2C26.131882667541504"
-    style="border: 1px solid black"></iframe>
+@if (options) {<div style="height: 450px;" leaflet [leafletOptions]="options" [leafletLayers]="layers!"></div>}

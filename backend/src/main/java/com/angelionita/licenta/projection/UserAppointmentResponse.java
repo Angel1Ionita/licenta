@@ -10,7 +10,7 @@ public interface UserAppointmentResponse {
 
     HospitalResponse getHospital();
 
-    String getMedic();
+    MedicResponse getMedic();
 
     SpecializationResponse getSpecialization();
 
@@ -21,6 +21,7 @@ public interface UserAppointmentResponse {
     String getDescription();
 
     interface UserResponse {
+        Long getId();
         String getFirstName();
 
         String getLastName();
@@ -28,11 +29,20 @@ public interface UserAppointmentResponse {
         String getEmail();
     }
 
+    interface MedicResponse {
+        Long getId();
+        String getFirstName();
+
+        String getLastName();
+        String getImage();
+    }
     interface HospitalResponse {
+        Long getId();
         String getName();
     }
 
     interface SpecializationResponse {
+        Long getId();
         String getName();
     }
 }

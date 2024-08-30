@@ -23,7 +23,8 @@ public class UserAppointment {
     private User user;//patient
     @ManyToOne
     private Hospital hospital;
-    private String medic;
+    @ManyToOne
+    private Medic medic;
     @ManyToOne
     private Specialization specialization;
     private LocalDate date;

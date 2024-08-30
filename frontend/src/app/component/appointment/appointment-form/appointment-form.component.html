@@ -3,12 +3,12 @@
     <mat-card-content>
         <form [formGroup]="isStaff ? appointmentForm : userAppointmentForm" (ngSubmit)="onSubmitAppointment()">
             @if (isStaff) { <!-- needs edit -->
-                <mat-form-field hideRequiredMarker="true" appearance="outline">
-                    <mat-label>User</mat-label>
-                    <input matInput formControlName="userId" placeholder="User">
-                </mat-form-field>
+            <mat-form-field hideRequiredMarker="true" appearance="outline">
+                <mat-label>User</mat-label>
+                <input matInput formControlName="userId" placeholder="User">
+            </mat-form-field>
             }
-            
+
             <mat-form-field hideRequiredMarker="true" appearance="outline">
                 <mat-label>Specialization</mat-label>
                 <mat-select formControlName="specialization">
@@ -30,18 +30,20 @@
 
             <mat-form-field hideRequiredMarker="true" appearance="outline">
                 <mat-label>Medic</mat-label>
-                @if (isStaff) {
-                    <mat-select formControlName="medic">
-                        @for (medic of medics | async; track $index) {
-                        <mat-option value={{medic.id}}>{{medic.first_name}} {{medic.last_name}}</mat-option>
-                        }
-                    </mat-select>
-                }
-                @else {
-                    <input matInput formControlName="medic" placeholder="Medic">
-                }
-                
-                <!-- <mat-hint>Hint</mat-hint> -->
+                <!-- <mat-select formControlName="medic">
+                    @for (medic of medics | async; track $index) {
+                    <mat-option [value]="medic.id">{{medic.first_name}} {{medic.last_name}}</mat-option>
+                    }
+                </mat-select>  -->
+
+                <input type="text" matInput formControlName="medic"
+                    [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayMedicOptions">
+                    @for (medic of filteredMedics | async; track $index) {
+                    <mat-option [value]="medic.id">{{medic.first_name}} {{medic.last_name}}</mat-option>
+                    }
+                </mat-autocomplete>
+
             </mat-form-field>
 
             <mat-form-field hideRequiredMarker="true" appearance="outline">

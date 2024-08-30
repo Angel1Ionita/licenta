@@ -10,6 +10,8 @@ import { MainComponent } from './component/main/main.component';
 import { StaffAppointmentListComponent } from './component/appointment/staff-appointment-list/staff-appointment-list.component';
 import { UserAppointmentListComponent } from './component/appointment/user-appointment-list/user-appointment-list.component';
 import { MedicComponent } from './component/medic/medic.component';
+import { PricesComponent } from './component/prices/prices.component';
+import { ArticleComponent } from './component/article/article.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -22,7 +24,10 @@ export const routes: Routes = [
             { path: 'medics/:id', component: MedicComponent },
             { path: 'contact', component: ContactComponent },
             { path: 'appointments', component: UserAppointmentListComponent },
+            { path: 'prices', component: PricesComponent },
             { path: 'staff-appointments', component: StaffAppointmentListComponent },
+
+            { path: 'articole/:id', component: ArticleComponent}
         ]
     },
 

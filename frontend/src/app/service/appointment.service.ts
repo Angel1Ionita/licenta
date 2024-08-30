@@ -19,12 +19,24 @@ export class AppointmentService {
     return this.http.post(this.baseUrl + "/appointments", appointment);
   }
 
+  deleteUserAppointment(id: number) {
+    return this.http.delete(this.baseUrl + "/user-appointments/" + id)
+  }
+
   getUserAppointmentsByUser() {
-    return this.http.get<UserAppointmentResponse[]>(this.baseUrl + "/user-appointments/user")
+    return this.http.get<UserAppointmentResponse[]>(this.baseUrl + "/user-appointments/user");
+  }
+
+  getUserAppointmentsByMedic() {
+    return this.http.get<UserAppointmentResponse[]>(this.baseUrl + "/user-appointments/medic");
   }
 
   getAppointmentsByUser() {
     return this.http.get<AppointmentResponse[]>(this.baseUrl + "/appointments/user");
+  }
+
+  getAppointmentsByMedic() {
+    return this.http.get<AppointmentResponse[]>(this.baseUrl + "/appointments/medic");
   }
 
   getAllUserAppointments() {
@@ -33,6 +45,10 @@ export class AppointmentService {
 
   getAllAppointments() {
     return this.http.get<AppointmentResponse[]>(this.baseUrl + "/appointments");
+  }
+
+  addSummary(id: number, summary: string) {
+    return this.http.put(this.baseUrl + "/appointments/summary/" + id, summary);
   }
 
 
