@@ -1,10 +1,11 @@
-<!-- <mat-form-field>
-    <mat-label>Favorite food</mat-label>
-    <mat-select [(value)]="citye">
-      @for (center of centers; track city) {
-        <mat-option [value]="city[0]">{{city[0]}}</mat-option>
-      }
-    </mat-select>
-  </mat-form-field> -->
+<mat-form-field>
+  <mat-label>Alege orasul</mat-label>
+  <mat-select [(value)]="city" (selectionChange)="onCityChange()">
+      <mat-option value="Bucharest">Bucuresti</mat-option>
+      <mat-option value="Sibiu">Sibiu</mat-option>
+      <mat-option value="Brasov">Brasov</mat-option>
+      <mat-option value="Cluj-Napoca">Cluj-Napoca</mat-option>
+  </mat-select>
+</mat-form-field>
 
 @if (options) {<div style="height: 450px;" leaflet [leafletOptions]="options" [leafletLayers]="layers!"></div>}

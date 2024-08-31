@@ -1,55 +1,66 @@
 import { Component, OnInit } from '@angular/core';
 import { DoctorService } from '../../service/doctor.service';
-import { Medic } from '../../dto/medic';
+import { Hospital, Medic, Specialization } from '../../dto/medic';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { NavigationComponent } from '../navigation/navigation.component';
 import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
+import { Observable } from 'rxjs';
+import { SpecializationService } from '../../service/specialization.service';
+import { HospitalService } from '../../service/hospital.service';
 
 @Component({
   selector: 'app-doctor-card',
   standalone: true,
-  imports: [MatCardModule, MatButtonModule, NavigationComponent, RouterModule, CommonModule],
+  imports: [MatCardModule, MatButtonModule, NavigationComponent, RouterModule, MatFormFieldModule, MatSelectModule, MatOptionModule, AsyncPipe],
   templateUrl: './doctor-card.component.html',
   styleUrls: ['./doctor-card.component.css'] // Note the plural "styleUrls"
 })
 export class DoctorCardComponent implements OnInit {
   medics?: Medic[];
 
-  constructor(private doctorService: DoctorService) { }
+  specializations$?: Observable<Specialization[]>
+  hospitals$?: Observable<Hospital[]>
+
+  selectedSpecialization?: string;
+  selectedHospital?: string;
+  selectedCity?: string;
+
+  filteredMedics?: Medic[];
+
+
+  constructor(
+    private doctorService: DoctorService,
+    private specializationService: SpecializationService,
+    private hospitalService: HospitalService,
+  ) { }
 
   ngOnInit(): void {
-    this.doctorService.getDoctors().subscribe(data => this.medics = data);
+    this.doctorService.getDoctors().subscribe(data => {this.medics = data;
+      this.filteredMedics=this.medics;
+      console.log(this.filteredMedics)
+    });
+
+    this.hospitals$=this.hospitalService.getHospitals();
+    this.specializations$=this.specializationService.getSpecializations();
+
+    
+    
   }
 
   getImage(image: string | null): string {
     return image ? `http://localhost:8080/images/${image}.webp` : 'assets/images/default.webp';
   }
 
-  onHoverCard(event: Event): void {
-    const target = event.currentTarget as HTMLElement;
-    target.style.transform = 'scale(1.05)';
-    target.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.3)';
-  }
-
-  onLeaveCard(event: Event): void {
-    const target = event.currentTarget as HTMLElement;
-    target.style.transform = 'scale(1)';
-    target.style.boxShadow = 'none';
-  }
-
-  onHoverButton(event: Event): void {
-    const target = event.currentTarget as HTMLElement;
-    target.style.transform = 'scale(1.1)';
-  }
-
-  onLeaveButton(event: Event): void {
-    const target = event.currentTarget as HTMLElement;
-    target.style.transform = 'scale(1)';
-  }
-
-  trackByMedics(index: number, medic: Medic): number {
-    return medic.id; // Assuming 'id' is a unique identifier in Medic
+  onSelectChange() {
+    this.filteredMedics=this.medics?.filter(medic =>
+      (!this.selectedCity || medic.hospital?.city==this.selectedCity) &&
+      (!this.selectedHospital || medic.hospital?.name == this.selectedHospital) &&
+      (!this.selectedSpecialization || medic.specialization?.name == this.selectedSpecialization)
+    );
   }
 }

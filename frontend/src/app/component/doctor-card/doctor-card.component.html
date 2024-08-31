@@ -1,15 +1,45 @@
 <h1 style="text-align: center; margin-bottom: 20px;">Medics</h1>
 
+
+<mat-form-field>
+  <mat-label>Specializare</mat-label>
+  <mat-select [(value)]="selectedSpecialization" (selectionChange)="onSelectChange()">
+    <mat-option>--</mat-option>
+    @for (specialization of specializations$ | async; track $index) {
+    <mat-option [value]="specialization.name">{{specialization.name}}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field>
+  <mat-label>Spital</mat-label>
+  <mat-select [(value)]="selectedHospital" (selectionChange)="onSelectChange()">
+    <mat-option>--</mat-option>
+    @for (hospital of hospitals$ | async; track $index) {
+    <mat-option [value]="hospital.name">{{hospital.city}} {{hospital.name}}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field>
+  <mat-label>Oras</mat-label>
+  <mat-select [(value)]="selectedCity" (selectionChange)="onSelectChange()">
+    <mat-option>--</mat-option>
+    <mat-option value="Bucharest">Bucuresti</mat-option>
+    <mat-option value="Sibiu">Sibiu</mat-option>
+    <mat-option value="Brasov">Brasov</mat-option>
+    <mat-option value="Cluj-Napoca">Cluj-Napoca</mat-option>
+  </mat-select>
+</mat-form-field>
+
 <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
-  <mat-card *ngFor="let medic of medics; trackBy: trackByMedics" 
-            style="width: 300px; transition: transform 0.3s, box-shadow 0.3s;" 
-            (mouseover)="onHoverCard($event)" 
-            (mouseleave)="onLeaveCard($event)">
+  @for (medic of filteredMedics; track $index) {
+  <mat-card style="width: 300px; transition: transform 0.3s, box-shadow 0.3s;">
     <mat-card-header>
       <img mat-card-avatar [src]="getImage(medic.image)">
       <div style="display: flex; flex-direction: column;">
-        <mat-card-title style="cursor: pointer; font-weight: bold; font-size: 1.2em;" 
-                        [routerLink]="['/medics', medic.id]">
+        <mat-card-title style="cursor: pointer; font-weight: bold; font-size: 1.2em;"
+          [routerLink]="['/medics', medic.id]">
           {{ medic.first_name + ' ' + medic.last_name }}
         </mat-card-title>
         <mat-card-subtitle style="font-size: 0.9em; color: gray;">
@@ -21,15 +51,11 @@
       <!-- Additional content can go here -->
     </mat-card-content>
     <mat-card-actions style="justify-content: center; padding-top: 10px;">
-      <button mat-flat-button 
-              routerLink="/appointments" 
-              [queryParams]="{ medic: medic.id }" 
-              color="primary" 
-              style="transition: transform 0.3s;" 
-              (mouseover)="onHoverButton($event)" 
-              (mouseleave)="onLeaveButton($event)">
+      <button mat-flat-button routerLink="/appointments" [queryParams]="{ medic: medic.id }" color="primary"
+        style="transition: transform 0.3s;">
         Make an appointment
       </button>
     </mat-card-actions>
   </mat-card>
+  }
 </div>
