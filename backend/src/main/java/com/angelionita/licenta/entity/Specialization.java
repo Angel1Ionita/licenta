@@ -1,4 +1,4 @@
-package com.angelionita.licenta.model;
+package com.angelionita.licenta.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

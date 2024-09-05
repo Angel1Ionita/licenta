@@ -1,4 +1,4 @@
-package com.angelionita.licenta.model;
+package com.angelionita.licenta.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,8 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Appointment {
+@Table(name = "appointment_request")
+public class UserAppointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,9 +27,9 @@ public class Appointment {
     private Medic medic;
     @ManyToOne
     private Specialization specialization;
+    @ManyToOne
+    private Product product;
     private LocalDate date;
     private LocalTime time;
     private String description;
-    private String summary;
-
 }

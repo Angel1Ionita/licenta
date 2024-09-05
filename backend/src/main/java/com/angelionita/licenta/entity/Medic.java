@@ -1,4 +1,4 @@
-package com.angelionita.licenta.model;
+package com.angelionita.licenta.entity;
 
 import com.angelionita.licenta.dto.UserAdminRegisterDto;
 import jakarta.persistence.*;
@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter

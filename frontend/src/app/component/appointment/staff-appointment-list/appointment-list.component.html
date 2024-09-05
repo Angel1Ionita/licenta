@@ -1,0 +1,49 @@
+<div class="appointment-container">
+  <mat-card class="appointment-card">
+    <mat-card-title>Cereri de consultatie</mat-card-title>
+    <mat-card-content>
+      @for (userAppointment of userAppointments; track $index) {
+      <div class="appointment-item" (click)="openUserAppointmentDialog(userAppointment)">
+        <mat-card>
+          <mat-card-content>
+            <p><strong>Pacient:</strong> {{userAppointment.user.firstName}} {{userAppointment.user.lastName}}</p>
+            <p><strong>Spital:</strong> {{userAppointment.hospital.name}}</p>
+            <p><strong>Medic:</strong> {{userAppointment.medic.firstName}} {{userAppointment.medic.lastName}}</p>
+            <p><strong>Sectie:</strong> {{userAppointment.specialization.name}}</p>
+            <p><strong>Investigatie:</strong> {{userAppointment.product.name}}</p>
+            <p><strong>Data si ora:</strong> {{userAppointment.date | date:'dd-MM-yyyy'}} - {{userAppointment.time |
+              time}}</p>
+            <p><strong>Mentiuni:</strong> {{userAppointment.description}}</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      }
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="appointment-card">
+    <mat-card-title>Consultatii confirmate</mat-card-title>
+    <mat-card-content>
+      @for (appointment of appointments; track $index) {
+      <div class="appointment-item" (click)="openAppointmentDialog(appointment)">
+        <mat-card>
+          <mat-card-content>
+            <p><strong>Pacient:</strong> {{appointment.user.firstName}} {{appointment.user.lastName}}</p>
+            <p><strong>Spital:</strong> {{appointment.hospital.name}}</p>
+            <p><strong>Medic:</strong> {{appointment.medic.firstName}} {{appointment.medic.lastName}}</p>
+            <p><strong>Sectie:</strong> {{appointment.specialization.name}}</p>
+            <p><strong>Investigatie:</strong> {{appointment.product.name}}</p>
+            <p><strong>Data si ora:</strong> {{appointment.date | date:'dd-MM-yyyy'}} - {{appointment.time | time}}</p>
+            <p><strong>Mentiuni:</strong> {{appointment.description}}</p>
+            @if(appointment.summary){
+            <p><strong>Notele medicului:</strong> {{appointment.summary}}</p>
+            }
+          </mat-card-content>
+        </mat-card>
+      </div>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<app-appointment-form [isStaff]="isStaff"></app-appointment-form>

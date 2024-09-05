@@ -1,9 +1,9 @@
 package com.angelionita.licenta.repository;
 
-import com.angelionita.licenta.model.Medic;
+import com.angelionita.licenta.entity.Medic;
 import com.angelionita.licenta.projection.UserAppointmentResponse;
-import com.angelionita.licenta.model.UserAppointment;
-import com.angelionita.licenta.model.User;
+import com.angelionita.licenta.entity.UserAppointment;
+import com.angelionita.licenta.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

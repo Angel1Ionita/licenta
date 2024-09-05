@@ -2,8 +2,8 @@ package com.angelionita.licenta.controller;
 
 import com.angelionita.licenta.dto.AppointmentRequest;
 import com.angelionita.licenta.dto.UserAppointmentRequest;
-import com.angelionita.licenta.model.Appointment;
-import com.angelionita.licenta.model.UserAppointment;
+import com.angelionita.licenta.entity.Appointment;
+import com.angelionita.licenta.entity.UserAppointment;
 import com.angelionita.licenta.projection.AppointmentResponse;
 import com.angelionita.licenta.projection.UserAppointmentResponse;
 import com.angelionita.licenta.service.AppointmentService;

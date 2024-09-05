@@ -1,7 +1,7 @@
 package com.angelionita.licenta.repository;
 
 import com.angelionita.licenta.dto.MedicDto;
-import com.angelionita.licenta.model.User;
+import com.angelionita.licenta.entity.User;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

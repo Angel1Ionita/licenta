@@ -1,6 +1,6 @@
 package com.angelionita.licenta.repository;
 
-import com.angelionita.licenta.model.Medic;
+import com.angelionita.licenta.entity.Medic;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

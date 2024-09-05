@@ -4,6 +4,7 @@ public record AppointmentRequest(
 
         String userId,
         String specialization,
+        String product,
         String hospital,
         String medic,
         String date,

@@ -2,7 +2,7 @@ package com.angelionita.licenta.service;
 
 import com.angelionita.licenta.dto.AppointmentRequest;
 import com.angelionita.licenta.dto.UserAppointmentRequest;
-import com.angelionita.licenta.model.*;
+import com.angelionita.licenta.entity.*;
 import com.angelionita.licenta.projection.AppointmentResponse;
 import com.angelionita.licenta.projection.UserAppointmentResponse;
 import com.angelionita.licenta.repository.*;
@@ -23,11 +23,15 @@ public class AppointmentService {
     private final MedicRepository medicRepository;
     private final AppointmentRepository appointmentRepository;
     private final UserAppointmentRepository userAppointmentRepository;
+    private final ProductRepository productRepository;
+
     public UserAppointment createUserAppointment(Principal principal, UserAppointmentRequest userAppointmentRequest) {
         UserAppointment appointment = new UserAppointment();
         User user = userRepository.findByEmail(principal.getName());
         Specialization specialization = specializationRepository
                 .findById(Long.valueOf(userAppointmentRequest.specialization())).orElseThrow();
+        Product product = productRepository
+                .findById(Long.valueOf(userAppointmentRequest.product())).orElseThrow();
         Hospital hospital = hospitalRepository
                 .findById(Long.valueOf(userAppointmentRequest.hospital())).orElseThrow();
         Medic medic = medicRepository
@@ -37,6 +41,7 @@ public class AppointmentService {
 
         appointment.setUser(user);
         appointment.setSpecialization(specialization);
+        appointment.setProduct(product);
         appointment.setHospital(hospital);
         appointment.setMedic(medic);
         appointment.setDate(date);
@@ -52,6 +57,8 @@ public class AppointmentService {
                 .findById(Long.valueOf(appointmentRequest.userId())).orElseThrow();
         Specialization specialization = specializationRepository
                 .findById(Long.valueOf(appointmentRequest.specialization())).orElseThrow();
+        Product product = productRepository
+                .findById(Long.valueOf(appointmentRequest.product())).orElseThrow();
         Hospital hospital = hospitalRepository
                 .findById(Long.valueOf(appointmentRequest.hospital())).orElseThrow();
         Medic medic = medicRepository
@@ -61,6 +68,7 @@ public class AppointmentService {
 
         appointment.setUser(user);
         appointment.setSpecialization(specialization);
+        appointment.setProduct(product);
         appointment.setHospital(hospital);
         appointment.setMedic(medic);
         appointment.setDate(date);
@@ -106,8 +114,8 @@ public class AppointmentService {
         return appointmentRepository.findBy();
     }
 
-    public void addSummary(Long id, String summary){
-        Appointment appointment=appointmentRepository.findById(id).orElseThrow();
+    public void addSummary(Long id, String summary) {
+        Appointment appointment = appointmentRepository.findById(id).orElseThrow();
         appointment.setSummary(summary);
         appointmentRepository.save(appointment);
     }

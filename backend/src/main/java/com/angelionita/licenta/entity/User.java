@@ -1,4 +1,4 @@
-package com.angelionita.licenta.model;
+package com.angelionita.licenta.entity;
 
 import com.angelionita.licenta.dto.UserAdminRegisterDto;
 import com.angelionita.licenta.dto.UserRegisterDto;

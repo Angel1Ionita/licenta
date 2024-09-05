@@ -12,6 +12,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { Observable } from 'rxjs';
 import { SpecializationService } from '../../service/specialization.service';
 import { HospitalService } from '../../service/hospital.service';
+import { StorageService } from '../../service/storage.service';
 
 @Component({
   selector: 'app-doctor-card',
@@ -32,14 +33,17 @@ export class DoctorCardComponent implements OnInit {
 
   filteredMedics?: Medic[];
 
+  isUser!: boolean;
 
   constructor(
     private doctorService: DoctorService,
     private specializationService: SpecializationService,
     private hospitalService: HospitalService,
+    private storageService: StorageService
   ) { }
 
   ngOnInit(): void {
+    this.isUser=this.storageService.getUserRole() == 'USER';
     this.doctorService.getDoctors().subscribe(data => {this.medics = data;
       this.filteredMedics=this.medics;
       console.log(this.filteredMedics)
@@ -48,7 +52,7 @@ export class DoctorCardComponent implements OnInit {
     this.hospitals$=this.hospitalService.getHospitals();
     this.specializations$=this.specializationService.getSpecializations();
 
-    
+  
     
   }
 

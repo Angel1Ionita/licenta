@@ -1,7 +1,7 @@
 package com.angelionita.licenta.dto;
 
-import com.angelionita.licenta.model.Hospital;
-import com.angelionita.licenta.model.Specialization;
+import com.angelionita.licenta.entity.Hospital;
+import com.angelionita.licenta.entity.Specialization;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

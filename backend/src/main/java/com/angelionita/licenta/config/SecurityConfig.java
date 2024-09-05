@@ -29,7 +29,7 @@ public class SecurityConfig {
                         .requestMatchers("/login","/logout", "/register", "/greeting",
                                 "/specializations","/hospitals","/medics","/medics/**",
                                 "/user-appointments/user","/appointments/user","/images/**").permitAll()
-                        .requestMatchers("/admin/**").permitAll()//.hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)

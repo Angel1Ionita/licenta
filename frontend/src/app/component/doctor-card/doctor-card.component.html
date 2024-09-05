@@ -51,10 +51,12 @@
       <!-- Additional content can go here -->
     </mat-card-content>
     <mat-card-actions style="justify-content: center; padding-top: 10px;">
+      @if (isUser) {
       <button mat-flat-button routerLink="/appointments" [queryParams]="{ medic: medic.id }" color="primary"
         style="transition: transform 0.3s;">
-        Make an appointment
+        Creeaza o programare
       </button>
+      }
     </mat-card-actions>
   </mat-card>
   }

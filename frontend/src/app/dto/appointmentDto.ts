@@ -1,5 +1,6 @@
 export interface UserAppointmentDto {
     specialization: string;
+    product: string;
     medic: string | null;
     hospital: string;
     date: string;
@@ -10,6 +11,7 @@ export interface UserAppointmentDto {
 export interface AppointmentDto {
     userId: string;
     specialization: string;
+    product: string;
     medic: string;
     hospital: string;
     date: string;
@@ -24,29 +26,28 @@ export interface UserAppointmentResponse {
         firstName: string;
         lastName: string;
         email: string;
-    }
+    },
     hospital: {
         id: number,
         name: string;
-    };
+    },
     medic: {
         id: number,
         firstName: string;
         lastName: string;
         image: string;
-    }
+    },
     specialization: {
         id: number,
         name: string;
-    };
-    date: Date | string;
-    time: string;
-    description: string;
-    // user: {
-    //     firstName: string;
-    //     lastName: string;
-    //     email: string;
-    // }
+    },
+    product: {
+        id: number,
+        name: string;
+    },
+    date: Date | string,
+    time: string,
+    description: string,
 
 }
 
@@ -57,24 +58,28 @@ export interface AppointmentResponse {
         firstName: string;
         lastName: string;
         email: string;
-    }
+    },
     hospital: {
         id: number,
         name: string;
-    };
+    },
     medic: {
         id: number,
         firstName: string;
         lastName: string;
         image: string;
-    }
+    },
     specialization: {
         id: number,
         name: string;
-    };
-    date: Date | string;
-    time: string;
-    description: string;
-    summary: string | null;
+    },
+    product: {
+        id: number,
+        name: string;
+    },
+    date: Date | string,
+    time: string,
+    description: string,
+    summary: string | null,
 
 }

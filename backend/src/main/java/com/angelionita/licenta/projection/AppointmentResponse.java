@@ -15,6 +15,8 @@ public interface AppointmentResponse {
 
     SpecializationResponse getSpecialization();
 
+    ProductResponse getProduct();
+
     LocalDate getDate();
 
     LocalTime getTime();
@@ -46,6 +48,11 @@ public interface AppointmentResponse {
     }
 
     interface SpecializationResponse {
+        Long getId();
+        String getName();
+    }
+
+    interface ProductResponse {
         Long getId();
         String getName();
     }

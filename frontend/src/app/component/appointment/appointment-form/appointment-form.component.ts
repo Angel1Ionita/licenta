@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -7,24 +7,25 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { FormBuilder, NonNullableFormBuilder, FormControl, ReactiveFormsModule, Validators, FormGroup } from '@angular/forms';
+import { FormBuilder, NonNullableFormBuilder, FormControl, ReactiveFormsModule, Validators, FormGroup, FormGroupDirective } from '@angular/forms';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { SpecializationService } from '../../../service/specialization.service';
 import { AppointmentService } from '../../../service/appointment.service';
-import { Hospital, Medic } from '../../../dto/medic';
+import { Hospital, Medic, Product, Specialization } from '../../../dto/medic';
 import { HospitalService } from '../../../service/hospital.service';
 import { NavigationComponent } from '../../navigation/navigation.component';
 import { AsyncPipe } from '@angular/common';
-import { Observable, debounceTime, distinctUntilChanged, map, of, startWith, switchMap, tap } from 'rxjs';
+import { Observable, debounceTime, map, of, startWith } from 'rxjs';
 import { DoctorService } from '../../../service/doctor.service';
 import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-appointment-form',
   standalone: true,
   imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule,
     MatIconModule, MatButtonModule, MatCardModule,
-    MatSelectModule, MatDatepickerModule, MatAutocompleteModule, NavigationComponent, AsyncPipe],
+    MatSelectModule, MatDatepickerModule, MatAutocompleteModule, NavigationComponent, AsyncPipe, MatSnackBarModule],
   providers: [provideNativeDateAdapter()],
   templateUrl: './appointment-form.component.html',
   styleUrl: './appointment-form.component.css'
@@ -32,9 +33,15 @@ import { ActivatedRoute } from '@angular/router';
 export class AppointmentFormComponent implements OnInit {
 
   @Input({ required: true }) isStaff!: boolean;
+  _snackBar = inject(MatSnackBar);
+
+  openSnackBar() {
+    this._snackBar.open('Programare realizata!', 'Ok');
+  }
 
   userAppointmentForm = this.formBuilder.group({
     specialization: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    product: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     hospital: [''],
     medic: ['', [Validators.required]],
     date: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -44,6 +51,7 @@ export class AppointmentFormComponent implements OnInit {
   appointmentForm = this.nonNullableFormBuilder.group({
     userId: ['', [Validators.required]],
     specialization: ['', [Validators.required]],
+    product: ['', [Validators.required]],
     hospital: ['', [Validators.required]],
     medic: ['', [Validators.required]],
     date: ['', [Validators.required]],
@@ -51,18 +59,23 @@ export class AppointmentFormComponent implements OnInit {
     description: [''],
   })
 
-  specializations?: Observable<{ id: number, name: string }[]>;
-  hospitals?: Observable<Hospital[]>;
+  specializations?: Specialization[];
+  hospitals$?: Observable<Hospital[]>;
+  products?: {
+    specialization_name: string;
+    id: number;
+    name: string;
+  }[];
 
-  medics?: Observable<Medic[]>;
+
+  medics$?: Observable<Medic[]>;
 
   minDate?: Date;
   maxDate?: Date;
 
-  filteredMedics?: Observable<Medic[]>;
+  filteredMedics$?: Observable<Medic[]>;
   medicOptions: Medic[] = [];
   //medicOptionsMap: Map<number,string>;
-  teststring = 'test';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -74,39 +87,49 @@ export class AppointmentFormComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
   ) { }
 
-  onSubmitAppointment() {
+  onSubmitAppointment(formDirective: FormGroupDirective) {
     if (!this.isStaff) {
       if (this.userAppointmentForm.valid) {
-        this.processForm(this.userAppointmentForm);
+        this.processForm(this.userAppointmentForm, formDirective);
       }
     }
     else if (this.appointmentForm.valid) {
-      this.processForm(this.appointmentForm);
+      this.processForm(this.appointmentForm, formDirective);
     }
   }
 
-  processForm(form: FormGroup) {
+  processForm(form: FormGroup, formDirective: FormGroupDirective) {
     let appointment = form.getRawValue();
     appointment.date = this.formatDate(appointment.date as unknown as Date);
     if (this.isStaff) { this.appointmentService.createAppointment(appointment).subscribe(); }
     else { this.appointmentService.createUserAppointment(appointment).subscribe(); }
 
+    formDirective.resetForm();
     form.reset();
+    this.openSnackBar();
   }
 
   ngOnInit(): void {
-    this.medics = this.doctorService.getDoctors();
-    this.medics.subscribe(data => this.medicOptions = data);
-    this.specializations = this.specializationService.getSpecializations();
-    this.hospitals = this.hospitalService.getHospitals();
+    this.medics$ = this.doctorService.getDoctors();
+    this.medics$.subscribe(data => this.medicOptions = data);
+    this.specializationService.getSpecializations().subscribe(data => {
+      this.specializations = data; 
+      this.products = this.specializations?.flatMap(specialization =>
+        specialization.products.map(product => ({
+          specialization_name: specialization.name,
+          id: product.id,
+          name: product.name
+        }))
+      );
+    });
+    this.hospitals$ = this.hospitalService.getHospitals();
 
     this.minDate = this.addDays(new Date(), 1);
     this.maxDate = this.addDays(new Date(), 14);
 
-    this.filteredMedics = this.userAppointmentForm.get('medic')!.valueChanges.pipe(
+    this.filteredMedics$ = this.userAppointmentForm.get('medic')!.valueChanges.pipe(
       startWith(''),
       debounceTime(200),
-      //distinctUntilChanged(),
       map(value => {
         if (!value) {
           console.log(value);
@@ -121,7 +144,7 @@ export class AppointmentFormComponent implements OnInit {
     const medicId = this.activatedRoute.snapshot.queryParamMap.get('medic');
     if (medicId) {
       this.doctorService.getDoctorById(medicId).subscribe(data => {
-        if (data) { this.userAppointmentForm.controls.medic.setValue(`${data.title ?? ""} ${data.first_name} ${data.last_name}`); }
+        if (data) { this.userAppointmentForm.controls.medic.setValue(medicId); }
       });
     }
 

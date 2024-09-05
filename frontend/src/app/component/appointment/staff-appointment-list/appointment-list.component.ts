@@ -5,7 +5,7 @@ import { AppointmentService } from '../../../service/appointment.service';
 import { MatCardModule } from '@angular/material/card';
 import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
 import { TimePipe } from '../../../time.pipe';
-import { AppointmentFormComponent } from '../../appointment/appointment-form/appointment-form.component';
+import { AppointmentFormComponent } from '../appointment-form/appointment-form.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -16,25 +16,29 @@ import { Router } from '@angular/router';
 import { StorageService } from '../../../service/storage.service';
 
 @Component({
-  selector: 'app-staff-appointment-list',
+  selector: 'app-appointment-list',
   standalone: true,
   imports: [MatCardModule, AsyncPipe, DatePipe, TimePipe, AppointmentFormComponent, CommonModule],
-  templateUrl: './staff-appointment-list.component.html',
-  styleUrl: './staff-appointment-list.component.css'
+  templateUrl: './appointment-list.component.html',
+  styleUrl: './appointment-list.component.css'
 })
-export class StaffAppointmentListComponent implements OnInit, OnDestroy {
+export class AppointmentListComponent implements OnInit, OnDestroy {
   userAppointments?: UserAppointmentResponse[];
   appointments?: AppointmentResponse[];
 
   userAppointmentsSubscription!: Subscription;
   appointmentsSubscription!: Subscription;
 
+  isStaff!: boolean;
+
   constructor(
     private appointmentService: AppointmentService,
+    private storageService: StorageService,
     public dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
+    this.isStaff = this.storageService.getUserRole() == 'MEDIC';
     this.subscribe();
   }
 
@@ -63,8 +67,14 @@ export class StaffAppointmentListComponent implements OnInit, OnDestroy {
   }
 
   subscribe(): void {
-    this.userAppointmentsSubscription = this.appointmentService.getUserAppointmentsByMedic().subscribe(data => this.userAppointments = data);
-    this.appointmentsSubscription = this.appointmentService.getAppointmentsByMedic().subscribe(data => this.appointments = data);
+    if (this.isStaff) {
+      this.userAppointmentsSubscription = this.appointmentService.getUserAppointmentsByMedic().subscribe(data => this.userAppointments = data);
+      this.appointmentsSubscription = this.appointmentService.getAppointmentsByMedic().subscribe(data => this.appointments = data);
+    }
+    else{
+      this.userAppointmentsSubscription = this.appointmentService.getUserAppointmentsByUser().subscribe(data => this.userAppointments = data);
+      this.appointmentsSubscription = this.appointmentService.getAppointmentsByUser().subscribe(data => this.appointments = data);
+    }
   }
 
   unsubscribe(): void {
@@ -82,13 +92,13 @@ export class StaffAppointmentListComponent implements OnInit, OnDestroy {
   templateUrl: './user-appointment-dialog.html',
 })
 export class UserAppointmentDialog {
-
+  isStaff!: boolean;
   constructor(
     private appointmentService: AppointmentService,
-    private storageSerice: StorageService,
+    private storageService: StorageService,
     public dialogRef: MatDialogRef<UserAppointmentDialog>,
     @Inject(MAT_DIALOG_DATA) public appointment: UserAppointmentResponse,
-  ) { }
+  ) {this.isStaff = this.storageService.getUserRole() == 'MEDIC'; }
 
   onCloseClick() {
     this.dialogRef.close();
@@ -100,6 +110,7 @@ export class UserAppointmentDialog {
     const newAppointment: AppointmentDto = {
       userId: this.appointment.user.id.toString(),
       specialization: this.appointment.specialization.id.toString(),
+      product: this.appointment.product.id.toString(),
       hospital: this.appointment.hospital.id.toString(),
       medic: this.appointment.medic.id.toString(),
       date: this.appointment.date as string,
@@ -109,14 +120,14 @@ export class UserAppointmentDialog {
     console.log(newAppointment);
     this.appointmentService.deleteUserAppointment(this.appointment.id).subscribe(() => console.log('User Appointment should be deleted'));
     this.appointmentService.createAppointment(newAppointment).subscribe(() => console.log('Appointment should be created'));
-    this.storageSerice.refreshComponent();
+    this.storageService.refreshComponent();
 
   }
 
   onDeleteClick() {
     this.dialogRef.close();
     this.appointmentService.deleteUserAppointment(this.appointment.id).subscribe(() => console.log('#onDeleteClick called!'));
-    this.storageSerice.refreshComponent();
+    this.storageService.refreshComponent();
     //delete from array
   }
 
@@ -125,29 +136,40 @@ export class UserAppointmentDialog {
 @Component({
   selector: 'appointment-dialog',
   standalone: true,
-  imports: [MatButtonModule, MatDialogModule, DatePipe, TimePipe, MatFormFieldModule,MatInputModule,ReactiveFormsModule, MatButtonModule],
+  imports: [MatButtonModule, MatDialogModule, DatePipe, TimePipe, MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatButtonModule],
   templateUrl: './appointment-dialog.html',
 })
 export class AppointmentDialog {
   summary = new FormControl('');
+  isStaff!: boolean;
 
   constructor(
     private appointmentService: AppointmentService,
-    private storageSerice: StorageService,
+    private storageService: StorageService,
     public dialogRef: MatDialogRef<AppointmentDialog>,
     @Inject(MAT_DIALOG_DATA) public appointment: AppointmentResponse,
-  ) { }
+  ) {this.isStaff = this.storageService.getUserRole() == 'MEDIC'; }
 
   addSummary() {
-    this.appointment.summary=this.summary.getRawValue();
-    this.appointmentService.addSummary(this.appointment.id,this.appointment.summary!).subscribe();
+    this.appointment.summary = this.summary.getRawValue();
+    this.appointmentService.addSummary(this.appointment.id, this.appointment.summary!).subscribe();
     console.log('#addSummary called!');
   }
 
   createPDF() {
     const doc = new jsPDF();
-    doc.text(this.appointment.summary!, 10, 10);
-    doc.save("fisa_medicala.pdf"); // will save the file in the current working directory
+    doc.setFont('Times-Roman');
+    doc.text('Numele pacientului: ' + this.appointment.user.firstName + ' ' + this.appointment.user.lastName, 10, 60);
+    doc.text('Numele medicului: ' + this.appointment.medic.firstName + ' ' + this.appointment.medic.lastName, 10, 70);
+    doc.text('Sectia: ' + this.appointment.specialization.name, 10, 80);
+    doc.text('Investigatia: ' + this.appointment.specialization.name, 10, 90);
+    doc.text('Spitalul: ' + this.appointment.hospital.name, 10, 100);
+    doc.text('Observatiile medicului: ' + this.appointment.summary, 10, 120);
+    var image = new Image();
+    image.src = 'assets/images/logo.png';
+    doc.addImage(image, 'png', 55, 10, 100, 15);
+    console.log(image);
+    doc.save("fisa_medicala.pdf");
   }
 }
 

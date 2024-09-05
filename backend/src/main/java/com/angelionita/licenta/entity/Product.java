@@ -1,4 +1,4 @@
-package com.angelionita.licenta.model;
+package com.angelionita.licenta.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

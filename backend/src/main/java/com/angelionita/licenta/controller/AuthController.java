@@ -38,7 +38,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public Map<String, String> login(@Valid @RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
+    public Map<String, String> login(@Valid @RequestBody LoginRequest loginRequest,
+                                     HttpServletRequest request, HttpServletResponse response) {
         UsernamePasswordAuthenticationToken token = UsernamePasswordAuthenticationToken.unauthenticated(
                 loginRequest.getEmail(), loginRequest.getPassword());
         Authentication authentication = authenticationManager.authenticate(token);
