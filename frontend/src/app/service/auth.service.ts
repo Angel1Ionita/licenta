@@ -32,6 +32,14 @@ export class AuthService {
     return this.http.get<{ email: string, role: string }>(`${this.baseUrl}/user`);
   }
 
+  requestPasswordReset(email: { email: string }) {
+    return this.http.post(`${this.baseUrl}/forgot-password`, email);
+  }
+
+  finishPasswordReset(request: { token: string, new_password: string }) {
+    return this.http.post(`${this.baseUrl}/reset-password`, request)
+  }
+
 
 
 

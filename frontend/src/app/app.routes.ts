@@ -11,10 +11,14 @@ import { AppointmentListComponent as AppointmentListComponent } from './componen
 import { MedicComponent } from './component/medic/medic.component';
 import { PricesComponent } from './component/prices/prices.component';
 import { ArticleComponent } from './component/article/article.component';
+import { ForgotPasswordComponent } from './component/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './component/reset-password/reset-password.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
+    { path: 'forgot-password', component: ForgotPasswordComponent },
+    { path: 'reset-password', component: ResetPasswordComponent },
     {
         path: '', component: MainComponent, children: [
             { path: '', component: HomeComponent },

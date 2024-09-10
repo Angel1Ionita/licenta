@@ -11,7 +11,7 @@
 
             <mat-form-field hideRequiredMarker="true" appearance="outline">
                 <mat-label>Sectie</mat-label>
-                <mat-select formControlName="specialization">
+                <mat-select [(value)]="selectedSpecialization" formControlName="specialization">
                     @for (specialization of specializations; track $index) {
                     <mat-option value={{specialization.id}}>{{specialization.name}}</mat-option>
                     }
@@ -31,7 +31,7 @@
 
             <mat-form-field hideRequiredMarker="true" appearance="outline">
                 <mat-label>Spital</mat-label>
-                <mat-select formControlName="hospital">
+                <mat-select [value]="selectedHospital" formControlName="hospital">
                     @for (hospital of hospitals$ | async; track $index) {
                     <mat-option value={{hospital.id}}>{{hospital.name}}</mat-option>
                     }
@@ -42,12 +42,11 @@
                 <mat-label>Medic</mat-label>
                 <input type="text" matInput formControlName="medic"
                     [matAutocomplete]="auto">
-                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayMedicOptions">
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayMedicOptions" (optionSelected)="onMedicChange($event)">
                     @for (medic of filteredMedics$ | async; track $index) {
                     <mat-option [value]="medic.id">{{medic.first_name}} {{medic.last_name}}</mat-option>
                     }
                 </mat-autocomplete>
-
             </mat-form-field>
 
             <mat-form-field hideRequiredMarker="true" appearance="outline">

@@ -29,7 +29,7 @@ export class ContactComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.city = this.route.snapshot.queryParamMap.get('city') || 'Bucharest';
+    this.city = this.route.snapshot.queryParamMap.get('city') || 'Bucuresti';
     this.initializeCoordMap();
     this.hospitalService.getHospitals().subscribe(
       hospitals => {
@@ -54,7 +54,7 @@ export class ContactComponent implements OnInit {
   }
 
   initializeCoordMap(): void {
-    this.centers.set('Bucharest', [44.4325, 26.103889]);
+    this.centers.set('Bucuresti', [44.4325, 26.103889]);
     this.centers.set('Brasov', [45.666667, 25.616667]);
     this.centers.set('Sibiu', [45.792778, 24.151944]);
     this.centers.set('Cluj-Napoca', [46.766667, 23.583333]);

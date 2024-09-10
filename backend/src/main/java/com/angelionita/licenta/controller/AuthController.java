@@ -1,8 +1,10 @@
 package com.angelionita.licenta.controller;
 
 import com.angelionita.licenta.dto.LoginRequest;
+import com.angelionita.licenta.dto.PasswordResetRequest;
 import com.angelionita.licenta.dto.UserRegisterDto;
 import com.angelionita.licenta.service.UserService;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -51,7 +53,19 @@ public class AuthController {
     }
 
     @GetMapping("/user")
-    public Map<String, String> getUserInfo(Principal principal){
+    public Map<String, String> getUserInfo(Principal principal) {
         return userService.getUserInfo(principal.getName());
+    }
+
+    @PostMapping("/forgot-password")
+    public String initiatePasswordReset(@RequestBody Map<String, String> email) throws MessagingException {
+        userService.initiatePasswordReset(email.get("email"));
+        return "Password reset link created";
+    }
+
+    @PostMapping("/reset-password")
+    public String resetPassword(@RequestBody PasswordResetRequest request) throws Exception {
+        userService.resetPassword(request.getToken(), request.getNewPassword());
+        return "Password changed!";
     }
 }

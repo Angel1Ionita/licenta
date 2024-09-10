@@ -5,8 +5,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatSelectModule } from '@angular/material/select';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { FormBuilder, NonNullableFormBuilder, FormControl, ReactiveFormsModule, Validators, FormGroup, FormGroupDirective } from '@angular/forms';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { SpecializationService } from '../../../service/specialization.service';
@@ -15,7 +15,7 @@ import { Hospital, Medic, Product, Specialization } from '../../../dto/medic';
 import { HospitalService } from '../../../service/hospital.service';
 import { NavigationComponent } from '../../navigation/navigation.component';
 import { AsyncPipe } from '@angular/common';
-import { Observable, debounceTime, map, of, startWith } from 'rxjs';
+import { Observable, debounceTime, map, of, startWith, tap } from 'rxjs';
 import { DoctorService } from '../../../service/doctor.service';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -75,6 +75,9 @@ export class AppointmentFormComponent implements OnInit {
 
   filteredMedics$?: Observable<Medic[]>;
   medicOptions: Medic[] = [];
+
+  medicMap: Map<number, Medic> = new Map();
+  filteredMedicsSync?: Medic[];
   //medicOptionsMap: Map<number,string>;
 
   constructor(
@@ -111,9 +114,17 @@ export class AppointmentFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.medics$ = this.doctorService.getDoctors();
-    this.medics$.subscribe(data => this.medicOptions = data);
+    this.medics$.subscribe(data => {
+      this.medicOptions = data;
+      this.medicMap = data.reduce((acc, medic) => {
+        acc.set(medic.id, medic);
+        return acc;
+      }, new Map());
+      console.log(this.medicMap);
+
+    });
     this.specializationService.getSpecializations().subscribe(data => {
-      this.specializations = data; 
+      this.specializations = data;
       this.products = this.specializations?.flatMap(specialization =>
         specialization.products.map(product => ({
           specialization_name: specialization.name,
@@ -131,15 +142,22 @@ export class AppointmentFormComponent implements OnInit {
       startWith(''),
       debounceTime(200),
       map(value => {
-        if (!value) {
-          console.log(value);
-          return this._filter('');
+        let medic, name;
+        if (typeof value === 'string') {
+          name = value;
+          console.log('yay!');
+          console.log('value is :: ', value);
+          console.log('name is :: ', name);
         }
-        console.log(value + '!')
-        const filter = Number.isNaN(+value) ? value : this.displayMedicOptions(value);
-        return this._filter(filter);
+        else {
+          medic = this.medicMap.get(value as unknown as number);
+          name = `${medic?.first_name} ${medic?.last_name}`;
+        }
+
+        return name ? this._filter(name) : this.medicOptions.slice();
+
       })
-    );
+    ).pipe(tap(data => console.log(data)));
 
     const medicId = this.activatedRoute.snapshot.queryParamMap.get('medic');
     if (medicId) {
@@ -167,13 +185,30 @@ export class AppointmentFormComponent implements OnInit {
   }
 
 
-  displayMedicOptions = (id: any) => {
-    for (const option of this.medicOptions) {
-      if (option.id == id) {
-        return option.first_name + " " + option.last_name;
-      }
-    }
-    return '';
+  displayMedicOptions = (id: number): string => {
+    // for (const option of this.medicOptions) {
+    //   if (option.id == id) {
+    //     return option.first_name + " " + option.last_name;
+    //   }
+    // }
+    // return '';
+    const medic = this.medicMap.get(id);
+    return medic ? `${medic.first_name} ${medic.last_name}` : '';
+
+  }
+
+  selectedSpecialization?: string;
+  selectedHospital?: number;
+
+
+  onMedicChange($event: MatAutocompleteSelectedEvent) {
+    let medicId = $event.option.value as number;
+    console.log(medicId);
+    let medic = this.medicOptions.find(medic => medic.id == medicId);
+    console.log(medic);
+    this.selectedSpecialization = medic?.specialization?.id.toString();
+    console.log(this.selectedSpecialization);
+    console.log('onMedicChange called!');
   }
 
 }

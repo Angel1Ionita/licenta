@@ -1,9 +1,8 @@
 <h1 style="text-align: center; margin-bottom: 20px;">Medics</h1>
 
-
 <mat-form-field>
   <mat-label>Specializare</mat-label>
-  <mat-select [(value)]="selectedSpecialization" (selectionChange)="onSelectChange()">
+  <mat-select [(value)]="selectedSpecialization" (selectionChange)="onSelectChange($event)">
     <mat-option>--</mat-option>
     @for (specialization of specializations$ | async; track $index) {
     <mat-option [value]="specialization.name">{{specialization.name}}</mat-option>
@@ -12,25 +11,27 @@
 </mat-form-field>
 
 <mat-form-field>
-  <mat-label>Spital</mat-label>
-  <mat-select [(value)]="selectedHospital" (selectionChange)="onSelectChange()">
-    <mat-option>--</mat-option>
-    @for (hospital of hospitals$ | async; track $index) {
-    <mat-option [value]="hospital.name">{{hospital.city}} {{hospital.name}}</mat-option>
-    }
-  </mat-select>
-</mat-form-field>
-
-<mat-form-field>
   <mat-label>Oras</mat-label>
-  <mat-select [(value)]="selectedCity" (selectionChange)="onSelectChange()">
+  <mat-select [(value)]="selectedCity" (selectionChange)="onCityChange($event)">
     <mat-option>--</mat-option>
-    <mat-option value="Bucharest">Bucuresti</mat-option>
+    <mat-option value="Bucuresti">Bucuresti</mat-option>
     <mat-option value="Sibiu">Sibiu</mat-option>
     <mat-option value="Brasov">Brasov</mat-option>
     <mat-option value="Cluj-Napoca">Cluj-Napoca</mat-option>
   </mat-select>
 </mat-form-field>
+
+<mat-form-field>
+  <mat-label>Spital</mat-label>
+  <mat-select [(value)]="selectedHospital" (selectionChange)="onHospitalChange($event)">
+    <mat-option>--</mat-option>
+    @for (hospital of hospitalOptions; track $index) {
+    <mat-option [value]="hospital">{{hospital.city}} {{hospital.name}}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
+
+
 
 <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
   @for (medic of filteredMedics; track $index) {
