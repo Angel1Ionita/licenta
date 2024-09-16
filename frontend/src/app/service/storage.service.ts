@@ -14,7 +14,7 @@ export class StorageService {
 
   refreshComponent() {
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-      this.router.navigateByUrl('/staff-appointments')});
+      this.router.navigateByUrl('/appointments')});
   }
 
 }

@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -58,14 +60,14 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password")
-    public String initiatePasswordReset(@RequestBody Map<String, String> email) throws MessagingException {
+    public ResponseEntity<?> initiatePasswordReset(@RequestBody Map<String, String> email) throws MessagingException {
         userService.initiatePasswordReset(email.get("email"));
-        return "Password reset link created";
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");
     }
 
     @PostMapping("/reset-password")
-    public String resetPassword(@RequestBody PasswordResetRequest request) throws Exception {
+    public ResponseEntity<?> resetPassword(@RequestBody PasswordResetRequest request) throws Exception {
         userService.resetPassword(request.getToken(), request.getNewPassword());
-        return "Password changed!";
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");
     }
 }

@@ -10,7 +10,7 @@
             </mat-form-field>
 
             <mat-form-field hideRequiredMarker="true" appearance="outline">
-                <mat-label>Password</mat-label>
+                <mat-label>Parola</mat-label>
                 <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'">
                 <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
                     [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
@@ -18,8 +18,12 @@
                 </button>
             </mat-form-field>
 
-            <p routerLink="/forgot-password">Am uitat parola</p>
+            <p class="forgot-password" routerLink="/forgot-password">Am uitat parola</p>
             <button mat-flat-button color="primary" type="submit">Intra in cont</button>
+
+            @if (wrongCredentials) {
+            <p style="color: red;">Adresa de email sau parola incorecte</p>
+            }
 
         </form>
     </mat-card-content>

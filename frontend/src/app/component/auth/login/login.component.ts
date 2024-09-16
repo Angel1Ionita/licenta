@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { Router, RouterModule } from '@angular/router';
+import { error } from 'node:console';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +21,7 @@ export class LoginComponent {
   hidePassword = true;
   user?: string | null;
   role?: string | null;
+  wrongCredentials = false;
 
   loginForm = this.formBuilder.group({
     email: ['', Validators.required],
@@ -34,6 +36,7 @@ export class LoginComponent {
 
   onSubmitLogin(): void {
     console.log(this.loginForm.value);
+    this.wrongCredentials=false;
     if (this.loginForm.valid) {
       this.authService.performLogin(this.loginForm.getRawValue().email, this.loginForm.getRawValue().password)
         .subscribe(data => {
@@ -41,6 +44,10 @@ export class LoginComponent {
           localStorage.setItem('role', JSON.stringify(data.role));
           this.loginForm.reset();
           this.router.navigate(['']);
+        },
+        error => {
+          this.wrongCredentials=true;
+          this.loginForm.reset();
         }
         );
 

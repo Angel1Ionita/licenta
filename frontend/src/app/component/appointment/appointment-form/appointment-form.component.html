@@ -41,7 +41,7 @@
             <mat-form-field hideRequiredMarker="true" appearance="outline">
                 <mat-label>Medic</mat-label>
                 <input type="text" matInput formControlName="medic"
-                    [matAutocomplete]="auto">
+                    [matAutocomplete]="auto" [value]="selectedMedic">
                 <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayMedicOptions" (optionSelected)="onMedicChange($event)">
                     @for (medic of filteredMedics$ | async; track $index) {
                     <mat-option [value]="medic.id">{{medic.first_name}} {{medic.last_name}}</mat-option>

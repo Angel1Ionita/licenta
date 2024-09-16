@@ -37,7 +37,7 @@ export class AuthService {
   }
 
   finishPasswordReset(request: { token: string, new_password: string }) {
-    return this.http.post(`${this.baseUrl}/reset-password`, request)
+    return this.http.post(`${this.baseUrl}/reset-password`, request);
   }
 
 

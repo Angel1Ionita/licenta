@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, NgModule, OnInit } from '@angular/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { FormBuilder, NonNullableFormBuilder, FormControl, ReactiveFormsModule, Validators, FormGroup, FormGroupDirective } from '@angular/forms';
+import { FormBuilder, NonNullableFormBuilder, FormControl, ReactiveFormsModule, Validators, FormGroup, FormGroupDirective, NgModel } from '@angular/forms';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { SpecializationService } from '../../../service/specialization.service';
 import { AppointmentService } from '../../../service/appointment.service';
@@ -19,6 +19,7 @@ import { Observable, debounceTime, map, of, startWith, tap } from 'rxjs';
 import { DoctorService } from '../../../service/doctor.service';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { StorageService } from '../../../service/storage.service';
 
 @Component({
   selector: 'app-appointment-form',
@@ -37,6 +38,7 @@ export class AppointmentFormComponent implements OnInit {
 
   openSnackBar() {
     this._snackBar.open('Programare realizata!', 'Ok');
+    this.storageService.refreshComponent();
   }
 
   userAppointmentForm = this.formBuilder.group({
@@ -88,6 +90,7 @@ export class AppointmentFormComponent implements OnInit {
     private appointmentService: AppointmentService,
     private doctorService: DoctorService,
     private activatedRoute: ActivatedRoute,
+    private storageService: StorageService
   ) { }
 
   onSubmitAppointment(formDirective: FormGroupDirective) {
@@ -122,6 +125,13 @@ export class AppointmentFormComponent implements OnInit {
       }, new Map());
       console.log(this.medicMap);
 
+      if (!this.isStaff) {
+        let selectedMedicId = this.activatedRoute.snapshot.queryParamMap.get('medic');
+        this.selectedMedic = selectedMedicId ? this.medicMap.get(+selectedMedicId!)!.first_name + " " + this.medicMap.get(+selectedMedicId!)!.last_name : undefined;
+        this.userAppointmentForm.controls.medic.setValue(this.selectedMedic!);
+      }
+
+      console.log('selected medic', this.selectedMedic);
     });
     this.specializationService.getSpecializations().subscribe(data => {
       this.specializations = data;
@@ -138,16 +148,15 @@ export class AppointmentFormComponent implements OnInit {
     this.minDate = this.addDays(new Date(), 1);
     this.maxDate = this.addDays(new Date(), 14);
 
-    this.filteredMedics$ = this.userAppointmentForm.get('medic')!.valueChanges.pipe(
+    let medicOservable$ = this.isStaff ? this.appointmentForm.get('medic')!.valueChanges : this.userAppointmentForm.get('medic')!.valueChanges
+    this.filteredMedics$ = medicOservable$.pipe(
       startWith(''),
       debounceTime(200),
       map(value => {
         let medic, name;
         if (typeof value === 'string') {
           name = value;
-          console.log('yay!');
-          console.log('value is :: ', value);
-          console.log('name is :: ', name);
+
         }
         else {
           medic = this.medicMap.get(value as unknown as number);
@@ -159,12 +168,12 @@ export class AppointmentFormComponent implements OnInit {
       })
     ).pipe(tap(data => console.log(data)));
 
-    const medicId = this.activatedRoute.snapshot.queryParamMap.get('medic');
-    if (medicId) {
-      this.doctorService.getDoctorById(medicId).subscribe(data => {
-        if (data) { this.userAppointmentForm.controls.medic.setValue(medicId); }
-      });
-    }
+    // const medicId = this.activatedRoute.snapshot.queryParamMap.get('medic');
+    // if (medicId) {
+    //   this.doctorService.getDoctorById(medicId).subscribe(data => {
+    //     if (data) { this.userAppointmentForm.controls.medic.setValue(medicId); }
+    //   });
+    // }
 
 
   }
@@ -198,7 +207,8 @@ export class AppointmentFormComponent implements OnInit {
   }
 
   selectedSpecialization?: string;
-  selectedHospital?: number;
+  selectedHospital?: string;
+  selectedMedic?: string;
 
 
   onMedicChange($event: MatAutocompleteSelectedEvent) {
@@ -207,6 +217,8 @@ export class AppointmentFormComponent implements OnInit {
     let medic = this.medicOptions.find(medic => medic.id == medicId);
     console.log(medic);
     this.selectedSpecialization = medic?.specialization?.id.toString();
+    this.selectedHospital = medic?.hospital?.id.toString();
+
     console.log(this.selectedSpecialization);
     console.log('onMedicChange called!');
   }

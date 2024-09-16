@@ -1,24 +1,33 @@
-<swiper-container speed="500" initial-slide="1" css-mode="true" pagination="true" pagination-clickable="true" slides-per-view="2"
-autoplay-delay="7000" >
-    <swiper-slide routerLink="/articole/1">Numeasdasdas<img
-            src="https://www.interocloud.com/wp-content/uploads/2024/02/InteroClouc-Cum-sa-deschizi-o-clinica-medicala-de-succes.png"></swiper-slide>
+<swiper-container speed="500" initial-slide="1" css-mode="true" pagination="true" pagination-clickable="true"
+    slides-per-view="2" autoplay-delay="7000">
+    <swiper-slide routerLink="/articole/1"><img
+            src="https://s.iw.ro/gateway/g/ZmlsZVNvdXJjZT1odHRwJTNBJTJGJTJG/c3RvcmFnZWRpZ2l3b3JsZC5yY3MtcmRz/LnJvJTJGc3RvcmFnZSUyRjIwMjIlMkYw/NiUyRjE2JTJGMTUyOTMxOF8xNTI5MzE4/X3BvbHVhcmUtNC5qcGcmdz03ODAmaD02/MDAmemM9MSZoYXNoPWUyMTE2ZThlMTBlMDA1MmJlOGVkMjQxZGZhZjRiOTky.thumb.jpg">
+            <div class="text-overlay">Aerul pe care il respiram: esential, dar nociv</div>
+    </swiper-slide>
     <swiper-slide routerLink="/articole/2"><img
-            src="https://www.petrebogdan.ro/wp-content/uploads/Mersul-pe-jos-Beneficii-si-dezavantaje.jpg"></swiper-slide>
+            src="https://www.petrebogdan.ro/wp-content/uploads/Mersul-pe-jos-Beneficii-si-dezavantaje.jpg">
+            <div class="text-overlay">Mersul pe jos este benefic pentru sanatatea ta</div>
+    </swiper-slide>
     <swiper-slide routerLink="/articole/3"><img
-            src="https://thumbs.dreamstime.com/b/sigl%C4%83-medical%C4%83-72380945.jpg"></swiper-slide>
+            src="https://www.argesmedia.ro/wp-content/uploads/2019/09/vederea-si-anii-de-scoala.jpg">
+            <div class="text-overlay">Cum sa-ti mentii vederea buna indiferent de varsta</div>
+    </swiper-slide>
     <swiper-slide routerLink="/articole/4"><img
-            src="https://thumbs.dreamstime.com/b/sigl%C4%83-medical%C4%83-72380945.jpg"></swiper-slide>
+            src="https://www.reginamaria.ro/sites/default/files/styles/image_full/public/articol/2018%3A09/11articol_efectele_calculatorului.jpg.webp?itok=nmAPUbB6">
+            <div class="text-overlay">Efectele nocive ale calculatorului asupra vederii</div>
+    </swiper-slide>
     <swiper-slide routerLink="/articole/5"><img
-            src="https://thumbs.dreamstime.com/b/sigl%C4%83-medical%C4%83-72380945.jpg"></swiper-slide>
+            src="https://media.hotnews.ro/media_server1/image-2023-03-6-26124593-41-somnul-longevitatea.jpg">
+            <div class="text-overlay">Somnul este o superputere</div>
+    </swiper-slide>
 </swiper-container>
-
 
 <h1 style="text-align: center; font-size: 300%; margin-top: 100px; margin-bottom: 20px;">Testimoniale</h1>
 
 <div style="display: flex; justify-content: center;">
     @for (testimonial of testimonials; track $index) {
     <div class="image-container">
-        <img [src]="testimonial.image" alt="Zoomable Image" />
+        <img [src]="testimonial.image">
         <div class="text-overlay">{{testimonial.text}}</div>
     </div>
     }
